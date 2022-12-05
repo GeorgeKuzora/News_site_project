@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Новости</title>
+</head>
+<body>
+    {% if request.user.is_authenticated %}
+        <h3>Добро пожаловать на сайт {{ request.user.username }}</h3>
+    {% else %}
+        <h3>Вы неавторизированны на нашем сайте</h3>
+        <a href="{% url 'login' %}">Войти</a>
+    {% endif %}
+	<h1>Список новостей</h1>
+    {% if news %}
+    <ul>
+        {% for one_news in news %}
+        <li>
+            {% if one_news.is_active %}
+                <a href="/news/{{ one_news.id }}">{{ one_news.title }}</a>
+                <p>Дата новости: <time>{{ one_news.creation_at }}</time></p>
+            {% else %}
+                <p>Ожидает одобрения модератором</p>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <p>Новостей пока нет</p>
+    {% endif %}
+<form method="get" action="/post/">
+    {% csrf_token %}
+    <button type="submit">Новая новость</button>
+</form>   
+</body>
+</html>

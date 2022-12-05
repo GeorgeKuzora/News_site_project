@@ -1,0 +1,63 @@
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<title>{{ detailed_news.title }}</title>
+</head>
+<body>
+    {% if request.user.is_authenticated %}
+        <h3>Добро пожаловать на сайт {{ request.user.username }}</h3>
+    {% else %}
+        <h3>Вы неавторизированны на нашем сайте</h3>
+        <a href="{% url 'login' %}">Войти</a>
+    {% endif %}
+    <h1>{{ detailed_news.title }}</h1>
+    <p>{{ detailed_news.content }}</p>
+    <hr>
+    <h2>Комментарии</h2>
+    <ul>
+        {% if detailed_news.commentaries_set.all %}
+            {% for comment in detailed_news.commentaries_set.all %}
+            <li>
+                <p>{{ comment.commentary }}</p>
+                {% if comment.user %}
+                    <p>{{ comment.user }}</p>
+                {% else %}
+                    <p>{{ comment.user_name }}_anonim</p>
+                {% endif %}
+            </li>
+            {% endfor %}
+        {% else %}
+            <li>Комментариев пока нет</li>
+        {% endif %}
+    </ul>
+    <h3>Оставить комментарий</h3>
+        <form method="post" action="/news/{{ pk }}">
+            {% csrf_token %}
+            {{ commentaries_form.as_p }}
+            <!-- <p><label for="user_name">Your name: </label>{{ commentaries_form.user_name }}</p> -->
+            <!-- <p><label for="commentary">Your commentary: </label>{{ commentaries_form.commentary }}</p> -->
+            <!-- <p><label for="connected_news">For news: </label>{{ commentaries_form.connected_news }}</p> -->
+            <!-- <p><label for="user">User: </label>{{ commentaries_form.user }}</p> -->
+            <button type="submit">Оставить комментарий</button>
+        </form>
+    <!-- {% if request.user.is_authenticated %} -->
+    <!--     <form method="post" action="/news/{{ pk }}"> -->
+    <!--         {% csrf_token %} -->
+    <!--         {{ commentaries_form.user_name.as_hidden }} -->
+    <!--         {{ commentaries_form.commentary }} -->
+    <!--         {{ commentaries_form.connected_news.as_hidden }} -->
+    <!--         {{ commentaries_form.user }} -->
+    <!--         <button type="submit">Оставить комментарий</button> -->
+    <!--     </form> -->
+    <!-- {% else %} -->
+    <!--     <form method="post" action="/news/{{ pk }}"> -->
+    <!--         {% csrf_token %} -->
+    <!--         {{ commentaries_form.user_name }} -->
+    <!--         {{ commentaries_form.commentary }} -->
+    <!--         {{ commentaries_form.connected_news.as_hidden }} -->
+    <!--         {{ commentaries_form.user.as_hidden }} -->
+    <!--         <button type="submit">Оставить комментарий</button> -->
+    <!--     </form> -->
+    <!-- {% endif %} -->
+</body>
+</html> 

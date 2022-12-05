@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Новый комментарий</title>
+</head>
+<body>
+	<h2>Новый комментарий</h2>
+        <form method="post">
+		{% csrf_token %}
+		{{ commentaries_form.as_p }}
+		<button type="submit">Опубликовать</button>
+	</form>
+</body>
+</html>
